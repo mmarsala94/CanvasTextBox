@@ -1,0 +1,98 @@
+<!doctype html> 
+<html>     
+<head>         
+<title>CanvasTest</title>         
+<meta charset = "utf-8">         
+<link href = "canvasTest.css"  rel = "stylesheet" type="text/css">
+<CENTER>
+<canvas id="myCanvas" width="900" height="500" style="border:1px solid #000000;">
+</canvas>
+</CENTER>      
+</head>     
+<body>                 
+<script src = "canvasTest.js"></script>     
+ <script>
+ "use strict";
+
+function View(x, y){
+	//This is used to access the canvas width and height
+	this.canvas = document.getElementsByTagName('canvas')[0];
+	this.xtextBoxStartPosition = x;
+	this.ytextBoxStartPosition = y;
+	this.xtextBoxStartPositionBody = this.xtextBoxStartPosition + 10;
+	this.ytextBoxStartPositionBody = this.ytextBoxStartPosition + 10;
+	this.xtextStartPosition = this.xtextBoxStartPositionBody + 10;
+	this.ytextStartPosition = this.ytextBoxStartPositionBody + 25;
+	this.widthOfBox = this.canvas.width - 200;
+	this.heightOfBox = 100;
+	this.c = document.getElementById("myCanvas");
+	this.ctx = this.c.getContext("2d");
+	//Fills in the black background
+	this.ctx.fillStyle = "#000000";
+	this.ctx.fillRect(0,0,900,500);
+}
+
+var view = {
+	constructor: View,
+	drawTextBox: function(){
+		//TEXTBOX BORDER
+		this.grd = this.ctx.createLinearGradient(0, 200, 200, 0);
+		this.grd.addColorStop(0, "red");
+		this.grd.addColorStop(1, "blue");
+		//Fill with gradient
+		this.ctx.fillStyle = this.grd;
+		this.ctx.fillRect(this.xtextBoxStartPosition, this.ytextBoxStartPosition, this.widthOfBox + 20, this.heightOfBox + 20);
+		//TEXTBOX BODY
+		//Set the text-box body color before redrawing
+		this.ctx.fillStyle = "#808080";
+		//Draw the text-box body at the new position
+		this.ctx.fillRect(this.xtextBoxStartPositionBody, this.ytextBoxStartPositionBody, this.widthOfBox, this.heightOfBox);
+	},
+	writeText: function(str){
+    	this.ctx.font = "20px Arial";
+    	var integerFontSize = parseInt(this.ctx.font);
+    	//alert(str.length);
+    	var additionalCharacters = (this.widthOfBox / 100) * 2; //This gives you the additional characters if the width of canvas is changed. This only works, because of multiples of 100
+    	var endOfSentence =(this.widthOfBox/integerFontSize) + additionalCharacters;
+    	for(var i = 0; i < endOfSentence; i++)
+    	{
+
+    	}
+    	//Going to need to put an algorithm here to add an appropriate number of lines to properly fill the text box
+    	//After a certain length, it should go to the next line.
+    	//After perhaps 3 lines, the text should start over, regardless if the idea is finished.
+    	//If the idea finishs before the 3 lines, then you can restart from the beginning as well.
+    	//There could be a special symbol that is searched for to mark the end of an idea
+    	//The number of lines is really in proportion to your size-font and where you begin and end.
+
+    	this.ctx.strokeText(str,this.xtextStartPosition,this.ytextStartPosition);
+	},
+	reDrawBoard: function(){
+		this.ctx.clearRect(0,0,900,500);
+ 		this.ctx.fillStyle = "#FFF";
+ 		this.ctx.fillRect(0,0,900,500);
+	}
+	};
+
+
+
+
+View.prototype = view;
+
+var view1 = new View(100,340);
+
+//view1.updatePlayerPosition();
+
+	var FPS = 60;
+ 		setInterval(function() {
+ 			view1.reDrawBoard();
+			view1.drawTextBox();
+			view1.writeText("ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWX");
+			//console.log(view1.xPosition);
+ 		}, 1000/FPS);
+
+
+</script>
+
+</body> 
+</html>
