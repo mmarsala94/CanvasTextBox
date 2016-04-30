@@ -50,13 +50,31 @@ var view = {
 	},
 	writeText: function(str){
     	this.ctx.font = "20px Arial";
-    	var integerFontSize = parseInt(this.ctx.font);
+    	this.tempString = ""; //Initially set to empty string, but this will change if there is more than one line needed for the str.
+    	var charPerRow = str.length; //Initially set to assume 1 line. It will most likely change.
+    	var charsLeft = 0;
+    	var charactersPerRow;
+    	var integerFontSize = parseInt(this.ctx.font); //Convert the 20 to a string
+    	var rowCounter = 0; //Once the rowCounter gets to 2, its time to stop. Delete, and restart. Or if the idea finishes.
     	//alert(str.length);
     	var additionalCharacters = (this.widthOfBox / 100) * 2; //This gives you the additional characters if the width of canvas is changed. This only works, because of multiples of 100
-    	var endOfSentence =(this.widthOfBox/integerFontSize) + additionalCharacters;
-    	for(var i = 0; i < endOfSentence; i++)
-    	{
+    	this.endOfSentence = (this.widthOfBox/integerFontSize) + additionalCharacters;
 
+    	//If the string is too long for one row
+    	if(str.length > endOfSentence){
+    		charsLeft = str.length - endOfSentence; //75 - 50 = 25 left;
+    		//If we are on the first row
+    		if(rowCounter === 0){
+    			//Put the characters for the first row in tempString
+    			this.cropString(str, tempString, endOfSentence);
+    			//Draw the characters in tempString
+    			this.ctx.strokeText(this.tempString,this.xtextStartPosition,this.ytextStartPosition);
+    			//Adjust str THIS DOES NOT DO THAT. str should be adjusted in a separate function by this point! Think about using array.pop within cropString.
+    			str = str - endOfSentence;
+    		}
+    		else if(rowCounter === 1){
+    			this.ctx.strokeText(str)
+    		}
     	}
     	//Going to need to put an algorithm here to add an appropriate number of lines to properly fill the text box
     	//After a certain length, it should go to the next line.
@@ -64,13 +82,23 @@ var view = {
     	//If the idea finishs before the 3 lines, then you can restart from the beginning as well.
     	//There could be a special symbol that is searched for to mark the end of an idea
     	//The number of lines is really in proportion to your size-font and where you begin and end.
-
+    	else{
     	this.ctx.strokeText(str,this.xtextStartPosition,this.ytextStartPosition);
+    }
 	},
 	reDrawBoard: function(){
 		this.ctx.clearRect(0,0,900,500);
- 		this.ctx.fillStyle = "#FFF";
+ 		this.ctx.fillStyle = "#000";
  		this.ctx.fillRect(0,0,900,500);
+	},
+	//These are probably more Model functions. If such a thing will exist.
+	cropString: function(str, tempString, endOfSentence){
+		for(var i = 0; i < endOfSentence; i++){
+			this.tempString = this.tempString + str[i];
+		}
+	},
+	clearTempString: function(){
+		this.tempString = "";
 	}
 	};
 
