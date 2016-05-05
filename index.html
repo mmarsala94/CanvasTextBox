@@ -73,7 +73,7 @@ var view = {
     			//Draw the characters in tempString
     			this.ctx.strokeText(this.tempString,this.xtextStartPosition,this.ytextStartPosition);
     			this.clearTempString();
-    			this.tempString = str.slice(-this.charsLeft);
+    			str = str.slice(-this.charsLeft);
     			console.log(str.length);
     			console.log(str);
     		}
@@ -103,34 +103,48 @@ var view = {
     	//If the idea finishs before the 3 lines, then you can restart from the beginning as well.
     	//There could be a special symbol that is searched for to mark the end of an idea
     	//The number of lines is really in proportion to your size-font and where you begin and end.
+    //this.determineCharactersRemaining(str);
 
     	if(rowCounter === 0){
     			//Put the characters for the first row in tempString
     			console.log('so');
-    			this.cropString(str, this.tempString, this.endOfSentence);
+    			this.cropString(str, this.tempString, str.length);
     			//Draw the characters in tempString
     			this.ctx.strokeText(this.tempString,this.xtextStartPosition,this.ytextStartPosition);
-    			this.clearTempString();
-    			this.tempString= str.slice(-this.charsLeft);
+    			//this.clearTempString();
+       //          if(charsLeft === 0)
+       //              this.clearTempString();//This is because slice(0) copies the whole old text, not none of it. So we need to reset this.
+       //          else{
+    			// this.tempString= str.slice(-this.charsLeft);
+            //}
     		}
     		else if(rowCounter === 1){
     			//Put the characters for the first row in tempString
     			console.log('bo');
     			console.log(str);
-    			this.cropString(str, this.tempString, this.endOfSentence);
+    			this.cropString(str, this.tempString, str.length);
     			//Draw the characters in tempString
     			console.log(this.tempString);
     			this.ctx.strokeText(this.tempString,this.xtextStartPosition,this.ytextStartPosition+30);
-    			this.clearTempString();
-    			this.tempString = str.slice(-this.charsLeft);
+    			//this.clearTempString();
+       //          if(charsLeft === 0)
+       //              this.clearTempString();
+       //          else{
+    			// this.tempString = str.slice(-this.charsLeft);
+           // }
     		}
     		else if(rowCounter === 2){
     			//Put the characters for the first row in tempString
-    			this.cropString(str, this.tempString, this.endOfSentence);
+    			this.cropString(str, this.tempString, str.length);
     			//Draw the characters in tempString
     			this.ctx.strokeText(this.tempString,this.xtextStartPosition,this.ytextStartPosition+60);
-    			this.clearTempString();
-    			str = str.slice(-this.charsLeft);
+    			//this.clearTempString();
+       //          if(charsLeft === 0)
+       //              this.clearTempString();
+       //          else{
+       //              this.tempString = str.slice(-this.charsLeft);
+       //          }
+    			// str = str.slice(-this.charsLeft);
     		}
     	//this.ctx.strokeText(str,this.xtextStartPosition,this.ytextStartPosition);
     	//this.ctx.strokeText(str,this.xtextStartPosition,this.ytextStartPosition+30);
@@ -169,7 +183,7 @@ var view1 = new View(100,340);
 //view1.updatePlayerPosition();
 view1.reDrawBoard();
 			view1.drawTextBox();
-			view1.writeText("ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ");
+			view1.writeText("ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ");
 	var FPS = 60;
  		setInterval(function() {
  		// 	view1.reDrawBoard();
