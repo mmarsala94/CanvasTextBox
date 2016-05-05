@@ -94,6 +94,13 @@ var view = {
     			this.clearTempString();
     			str = str.slice(-this.charsLeft);
     		}
+            //Eventually you will need to determine the number of rows possible based on the size of the text and how many characters for this text
+            //This should be different for each font type as well. When you select a specific font-text, the rowCounter should change
+            //Or you could make the default 3 rows and allow for different fonts. But, you can't pick the size, it will just fit 3 rows.
+            else if(rowCounter > 2){
+                this.drawTextBox();
+                this.writeText(str);
+            }
     		rowCounter += 1;
     	}
 
@@ -111,7 +118,7 @@ var view = {
     			this.cropString(str, this.tempString, str.length);
     			//Draw the characters in tempString
     			this.ctx.strokeText(this.tempString,this.xtextStartPosition,this.ytextStartPosition);
-    			//this.clearTempString();
+    			this.clearTempString();
        //          if(charsLeft === 0)
        //              this.clearTempString();//This is because slice(0) copies the whole old text, not none of it. So we need to reset this.
        //          else{
@@ -126,7 +133,7 @@ var view = {
     			//Draw the characters in tempString
     			console.log(this.tempString);
     			this.ctx.strokeText(this.tempString,this.xtextStartPosition,this.ytextStartPosition+30);
-    			//this.clearTempString();
+    			this.clearTempString();
        //          if(charsLeft === 0)
        //              this.clearTempString();
        //          else{
@@ -138,7 +145,7 @@ var view = {
     			this.cropString(str, this.tempString, str.length);
     			//Draw the characters in tempString
     			this.ctx.strokeText(this.tempString,this.xtextStartPosition,this.ytextStartPosition+60);
-    			//this.clearTempString();
+    			this.clearTempString();
        //          if(charsLeft === 0)
        //              this.clearTempString();
        //          else{
@@ -146,6 +153,10 @@ var view = {
        //          }
     			// str = str.slice(-this.charsLeft);
     		}
+            else if(rowCounter > 2){
+                this.drawTextBox();
+                this.writeText(str);
+            }
     	//this.ctx.strokeText(str,this.xtextStartPosition,this.ytextStartPosition);
     	//this.ctx.strokeText(str,this.xtextStartPosition,this.ytextStartPosition+30);
     	//this.ctx.strokeText(str,this.xtextStartPosition,this.ytextStartPosition+60);
@@ -183,7 +194,7 @@ var view1 = new View(100,340);
 //view1.updatePlayerPosition();
 view1.reDrawBoard();
 			view1.drawTextBox();
-			view1.writeText("ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ");
+			view1.writeText("ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUV");
 	var FPS = 60;
  		setInterval(function() {
  		// 	view1.reDrawBoard();
