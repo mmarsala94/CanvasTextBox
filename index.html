@@ -3,11 +3,12 @@
 <head>         
 <title>CanvasTest</title>         
 <meta charset = "utf-8">         
-<link href = "canvasTest.css"  rel = "stylesheet" type="text/css">
+<link href = "canvasTest.css"  rel = "stylesheet" type="text/css"> 
+<img id="nextArrow" width="20" height="20" src="img/nextArrow.png"> 
 <CENTER>
 <canvas id="myCanvas" width="900" height="500" style="border:1px solid #000000;">
 </canvas>
-</CENTER>      
+</CENTER>    
 </head>     
 <body>                 
 <script src = "canvasTest.js"></script>     
@@ -25,11 +26,15 @@ function View(x, y){
 	this.ytextStartPosition = this.ytextBoxStartPositionBody + 25;
 	this.widthOfBox = this.canvas.width - 200;
 	this.heightOfBox = 100;
+    window.onload = function(){
 	this.c = document.getElementById("myCanvas");
 	this.ctx = this.c.getContext("2d");
+    var img = document.getElementById("nextArrow");
 	//Fills in the black background
-	this.ctx.fillStyle = "#000000";
+	this.ctx.fillStyle = "#FFFFFF";
 	this.ctx.fillRect(0,0,900,500);
+    this.ctx.drawImage(img,800,50,20,20);
+}
 }
 
 var view = {
@@ -98,6 +103,7 @@ var view = {
             //This should be different for each font type as well. When you select a specific font-text, the rowCounter should change
             //Or you could make the default 3 rows and allow for different fonts. But, you can't pick the size, it will just fit 3 rows.
             else if(rowCounter > 2){
+                this.reDrawCanvas();
                 this.drawTextBox();
                 this.writeText(str);
             }
@@ -154,6 +160,7 @@ var view = {
     			// str = str.slice(-this.charsLeft);
     		}
             else if(rowCounter > 2){
+                this.reDrawCanvas();
                 this.drawTextBox();
                 this.writeText(str);
             }
@@ -162,7 +169,7 @@ var view = {
     	//this.ctx.strokeText(str,this.xtextStartPosition,this.ytextStartPosition+60);
     //}
 	},
-	reDrawBoard: function(){
+	reDrawCanvas: function(){
 		this.ctx.clearRect(0,0,900,500);
  		this.ctx.fillStyle = "#FFF";
  		this.ctx.fillRect(0,0,900,500);
@@ -181,23 +188,46 @@ var view = {
 		this.charsLeft = str.length - this.endOfSentence;
 			if(this.charsLeft < 0)
 				this.charsLeft = 0;
-	}
-	};
+	},
+    drawNextArrow: function(){
+        window.onload = function(){
+          var img = document.getElementById("nextArrow");
+          this.ctx.drawImage(nextArrow,800,50,20,20); 
+       }
+    }
+};
 
 
 
 
 View.prototype = view;
 
+function Controller(){
+
+}
+
+
+var controller = {
+  constructor:Controller,
+  addEventListenerToArrow: function(){
+    document.documentElement.getElementById("nextArrow").addEventListener("click", function() {
+    });
+  }
+};
+Controller.prototype = controller;
+
 var view1 = new View(100,340);
+//var controller1 = new Controller();
+
 
 //view1.updatePlayerPosition();
-view1.reDrawBoard();
-			view1.drawTextBox();
-			view1.writeText("ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUV");
+    //view1.reDrawCanvas();
+    //view1.drawTextBox();
+    //view1.writeText("ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUV");
+    //view1.drawNextArrow();
 	var FPS = 60;
  		setInterval(function() {
- 		// 	view1.reDrawBoard();
+ 		// 	view1.reDrawCanvas();
 			// view1.drawTextBox();
 			// view1.writeText("ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ");
 			//console.log(view1.xPosition);
