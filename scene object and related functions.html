@@ -1,0 +1,253 @@
+<!doctype html> 
+<html>     
+<head>         
+<title>CanvasTest</title>         
+<meta charset = "utf-8">         
+<link href = "canvasTest.css"  rel = "stylesheet" type="text/css"> 
+<img id="nextArrow" width="20" height="20" src="img/nextArrow.png"> 
+<CENTER>
+<canvas id="myCanvas" width="900" height="500" style="border:1px solid #000000;">
+</canvas>
+</CENTER>    
+</head>     
+<body>                 
+<script src = "canvasTest.js"></script>     
+ <script>
+ "use strict";
+  //This will store a number of scene objects. Depending on the user's choice, a different 
+  //index will be selected. Some sort of loop will be needed to load the proper scene object
+  //which includes the background image, character images and dialogue that will be presented.
+  //Where these scenes will be stored and loaded from is the big question.
+  //
+var timeLine = [];
+var scene[name] = {
+    backgroundImage: img,
+    characters: characters,
+    dialogue: dialogue
+}
+
+function View(x, y){
+	//This is used to access the canvas width and height
+	this.canvas = document.getElementsByTagName('canvas')[0];
+	this.xtextBoxStartPosition = x;
+	this.ytextBoxStartPosition = y;
+	this.xtextBoxStartPositionBody = this.xtextBoxStartPosition + 10;
+	this.ytextBoxStartPositionBody = this.ytextBoxStartPosition + 10;
+	this.xtextStartPosition = this.xtextBoxStartPositionBody + 10;
+	this.ytextStartPosition = this.ytextBoxStartPositionBody + 25;
+	this.widthOfBox = this.canvas.width - 200;
+	this.heightOfBox = 100;
+    //window.onload = function(){
+	this.c = document.getElementById("myCanvas");
+	this.ctx = this.c.getContext("2d");
+    //var img = document.getElementById("nextArrow");
+	//Fills in the black background
+	this.ctx.fillStyle = "#FFFFFF";
+	this.ctx.fillRect(0,0,900,500);
+    //this.ctx.drawImage(img,800,50,20,20);
+//}
+}
+
+var view = {
+	constructor: View,
+	drawTextBox: function(){
+		//TEXTBOX BORDER
+		this.grd = this.ctx.createLinearGradient(0, 200, 200, 0);
+		this.grd.addColorStop(0, "red");
+		this.grd.addColorStop(1, "blue");
+		//Fill with gradient
+		this.ctx.fillStyle = this.grd;
+		this.ctx.fillRect(this.xtextBoxStartPosition, this.ytextBoxStartPosition, this.widthOfBox + 20, this.heightOfBox + 20);
+		//TEXTBOX BODY
+		//Set the text-box body color before redrawing
+		this.ctx.fillStyle = "#808080";
+		//Draw the text-box body at the new position
+		this.ctx.fillRect(this.xtextBoxStartPositionBody, this.ytextBoxStartPositionBody, this.widthOfBox, this.heightOfBox);
+	},
+	writeText: function(str){
+    	this.ctx.font = "20px Arial";
+    	this.tempString = ""; //Initially set to empty string, but this will change if there is more than one line needed for the str.
+    	var charPerRow = str.length; //Initially set to assume 1 line. It will most likely change.
+    	this.charsLeft = 0;
+    	var charactersPerRow;
+    	var integerFontSize = parseInt(this.ctx.font); //Convert the 20 to a string
+    	var rowCounter = 0; //Once the rowCounter gets to 2, its time to stop. Delete, and restart. Or if the idea finishes.
+    	//alert(str.length);
+    	var additionalCharacters = (this.widthOfBox / 100) * 2; //This gives you the additional characters if the width of canvas is changed. This only works, because of multiples of 100
+    	this.endOfSentence = (this.widthOfBox/integerFontSize) + additionalCharacters;
+    	//alert(this.endOfSentence);
+    	//If the string is too long for one row
+    	while(str.length > this.endOfSentence){
+    		//charsLeft = str.length - this.endOfSentence; //75 - 50 = 25 left;
+    		this.determineCharactersRemaining(str);
+    		console.log(this.charsLeft);
+    		//If we are on the first row
+    		if(rowCounter === 0){
+    			//Put the characters for the first row in tempString
+    			console.log('hey');
+    			this.cropString(str, this.tempString, this.endOfSentence);
+    			//Draw the characters in tempString
+    			this.ctx.strokeText(this.tempString,this.xtextStartPosition,this.ytextStartPosition);
+    			this.clearTempString();
+    			str = str.slice(-this.charsLeft);
+    			console.log(str.length);
+    			console.log(str);
+    		}
+    		else if(rowCounter === 1){
+    			//Put the characters for the first row in tempString
+    			console.log('yo');
+    			this.cropString(str, this.tempString, this.endOfSentence);
+    			//Draw the characters in tempString
+    			this.ctx.strokeText(this.tempString,this.xtextStartPosition,this.ytextStartPosition+30);
+    			this.clearTempString();
+    			str = str.slice(-this.charsLeft);
+    		}
+    		else if(rowCounter === 2){
+    			//Put the characters for the first row in tempString
+    			this.cropString(str, this.tempString, this.endOfSentence);
+    			//Draw the characters in tempString
+    			this.ctx.strokeText(this.tempString,this.xtextStartPosition,this.ytextStartPosition+60);
+    			this.clearTempString();
+    			str = str.slice(-this.charsLeft);
+    		}
+            //Eventually you will need to determine the number of rows possible based on the size of the text and how many characters for this text
+            //This should be different for each font type as well. When you select a specific font-text, the rowCounter should change
+            //Or you could make the default 3 rows and allow for different fonts. But, you can't pick the size, it will just fit 3 rows.
+            else if(rowCounter > 2){
+                this.reDrawCanvas();
+                this.drawTextBox();
+                this.writeText(str);
+            }
+    		rowCounter += 1;
+    	}
+
+    	//Going to need to put an algorithm here to add an appropriate number of lines to properly fill the text box
+    	//After a certain length, it should go to the next line.
+    	//After perhaps 3 lines, the text should start over, regardless if the idea is finished.
+    	//If the idea finishs before the 3 lines, then you can restart from the beginning as well.
+    	//There could be a special symbol that is searched for to mark the end of an idea
+    	//The number of lines is really in proportion to your size-font and where you begin and end.
+    //this.determineCharactersRemaining(str);
+
+    	if(rowCounter === 0){
+    			//Put the characters for the first row in tempString
+    			console.log('so');
+    			this.cropString(str, this.tempString, str.length);
+    			//Draw the characters in tempString
+    			this.ctx.strokeText(this.tempString,this.xtextStartPosition,this.ytextStartPosition);
+    			this.clearTempString();
+       //          if(charsLeft === 0)
+       //              this.clearTempString();//This is because slice(0) copies the whole old text, not none of it. So we need to reset this.
+       //          else{
+    			// this.tempString= str.slice(-this.charsLeft);
+            //}
+    		}
+    		else if(rowCounter === 1){
+    			//Put the characters for the first row in tempString
+    			console.log('bo');
+    			console.log(str);
+    			this.cropString(str, this.tempString, str.length);
+    			//Draw the characters in tempString
+    			console.log(this.tempString);
+    			this.ctx.strokeText(this.tempString,this.xtextStartPosition,this.ytextStartPosition+30);
+    			this.clearTempString();
+       //          if(charsLeft === 0)
+       //              this.clearTempString();
+       //          else{
+    			// this.tempString = str.slice(-this.charsLeft);
+           // }
+    		}
+    		else if(rowCounter === 2){
+    			//Put the characters for the first row in tempString
+    			this.cropString(str, this.tempString, str.length);
+    			//Draw the characters in tempString
+    			this.ctx.strokeText(this.tempString,this.xtextStartPosition,this.ytextStartPosition+60);
+    			this.clearTempString();
+       //          if(charsLeft === 0)
+       //              this.clearTempString();
+       //          else{
+       //              this.tempString = str.slice(-this.charsLeft);
+       //          }
+    			// str = str.slice(-this.charsLeft);
+    		}
+            else if(rowCounter > 2){
+                this.reDrawCanvas();
+                this.drawTextBox();
+                this.writeText(str);
+            }
+    	//this.ctx.strokeText(str,this.xtextStartPosition,this.ytextStartPosition);
+    	//this.ctx.strokeText(str,this.xtextStartPosition,this.ytextStartPosition+30);
+    	//this.ctx.strokeText(str,this.xtextStartPosition,this.ytextStartPosition+60);
+    //}
+	},
+	reDrawCanvas: function(){
+		this.ctx.clearRect(0,0,900,500);
+ 		this.ctx.fillStyle = "#FFF";
+ 		this.ctx.fillRect(0,0,900,500);
+	},
+	//These are probably more Model functions. If such a thing will exist.
+	cropString: function(str, tempString, endOfSentence){
+		for(var i = 0; i < endOfSentence; i++){
+			this.tempString = this.tempString + str[i];
+		}
+	},
+	clearTempString: function(){
+		this.tempString = "";
+	},
+	determineCharactersRemaining: function(str){
+		//slice may not work out. slice(0) copies the whole string.
+		this.charsLeft = str.length - this.endOfSentence;
+			if(this.charsLeft < 0)
+				this.charsLeft = 0;
+	},
+    drawNextArrow: function(){
+        //window.onload = function(){
+          var img = document.getElementById("nextArrow");
+          img.onload = function(){
+          this.ctx.drawImage(img,800,50,20,20); 
+       //}
+       }
+    }
+};
+
+
+
+
+View.prototype = view;
+
+function Controller(){
+
+}
+
+
+var controller = {
+  constructor:Controller,
+  addEventListenerToArrow: function(){
+    document.documentElement.getElementById("nextArrow").addEventListener("click", function() {
+    });
+  }
+};
+Controller.prototype = controller;
+
+var view1 = new View(100,340);
+//var controller1 = new Controller();
+
+
+//view1.updatePlayerPosition();
+    view1.reDrawCanvas();
+    view1.drawTextBox();
+    view1.writeText("ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUV");
+    //view1.drawNextArrow();
+	var FPS = 60;
+ 		setInterval(function() {
+ 		// 	view1.reDrawCanvas();
+			// view1.drawTextBox();
+			// view1.writeText("ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ");
+			//console.log(view1.xPosition);
+ 		}, 1000/FPS);
+
+
+</script>
+
+</body> 
+</html>
