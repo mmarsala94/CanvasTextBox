@@ -19,12 +19,33 @@
   //which includes the background image, character images and dialogue that will be presented.
   //Where these scenes will be stored and loaded from is the big question.
   //
-var timeLine = [];
+
 var scene[name] = {
     backgroundImage: img,
     characters: characters,
     dialogue: dialogue
 }
+
+function TimeLine(){
+    this.timeLine = [];
+}
+
+var timeLine = {
+    constructor:TimeLine,
+    createScene: function(name, img, characters, dialogue){
+        scene[name] {
+          backgroundImage: img,
+          characters: characters,
+          dialogue: dialogue
+    }
+
+    this.timeLine.push(scene[name]);
+
+    }
+
+}
+TimeLine.prototype = timeLine;
+
 
 function View(x, y){
 	//This is used to access the canvas width and height
