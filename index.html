@@ -3,17 +3,48 @@
 <head>         
 <title>CanvasTest</title>         
 <meta charset = "utf-8">         
-<link href = "canvasTest.css"  rel = "stylesheet" type="text/css"> 
-<img id="nextArrow" width="20" height="20" src="img/nextArrow.png"> 
+<link href = "canvasTest.css"  rel = "stylesheet" type="text/css">  
+</head>     
+<body>                 
 <CENTER>
 <canvas id="myCanvas" width="900" height="500" style="border:1px solid #000000;">
 </canvas>
-</CENTER>    
-</head>     
-<body>                 
-<script src = "canvasTest.js"></script>     
+</CENTER>     
  <script>
  "use strict";
+  //This will store a number of scene objects. Depending on the user's choice, a different 
+  //index will be selected. Some sort of loop will be needed to load the proper scene object
+  //which includes the background image, character images and dialogue that will be presented.
+  //Where these scenes will be stored and loaded from is the big question.
+  //Some kind of double buffer may be in order to redraw certain sections of the canvas
+  //This might be done by using two different canvas.
+
+// var scene[name] = {
+//     backgroundImage: img,
+//     characters: characters,
+//     dialogue: dialogue
+// }
+
+// function TimeLine(){
+//     this.timeLine = [];
+// }
+
+// var timeLine = {
+//     constructor:TimeLine,
+//     createScene: function(name, img, characters, dialogue){
+//         scene[name] {
+//           backgroundImage: img,
+//           characters: characters,
+//           dialogue: dialogue
+//     }
+
+//     this.timeLine.push(scene[name]);
+
+//     }
+
+// };
+// TimeLine.prototype = timeLine;
+
 
 function View(x, y){
 	//This is used to access the canvas width and height
@@ -26,15 +57,15 @@ function View(x, y){
 	this.ytextStartPosition = this.ytextBoxStartPositionBody + 25;
 	this.widthOfBox = this.canvas.width - 200;
 	this.heightOfBox = 100;
-    window.onload = function(){
+    //window.onload = function(){
 	this.c = document.getElementById("myCanvas");
 	this.ctx = this.c.getContext("2d");
-    var img = document.getElementById("nextArrow");
+    //var img = document.getElementById("nextArrow");
 	//Fills in the black background
 	this.ctx.fillStyle = "#FFFFFF";
 	this.ctx.fillRect(0,0,900,500);
-    this.ctx.drawImage(img,800,50,20,20);
-}
+    //this.ctx.drawImage(img,800,50,20,20);
+//}
 }
 
 var view = {
@@ -190,10 +221,30 @@ var view = {
 				this.charsLeft = 0;
 	},
     drawNextArrow: function(){
-        window.onload = function(){
-          var img = document.getElementById("nextArrow");
-          this.ctx.drawImage(nextArrow,800,50,20,20); 
-       }
+       if (this.canvas.getContext){
+          var ctx = this.canvas.getContext('2d');
+
+          var img = new Image();
+
+          img.onload = function(){
+            ctx.drawImage(img,750,420,20,20);
+
+        }
+        img.src = 'http://icongal.com/gallery/download/12840/512/png';
+        }
+    },
+    drawAnImage: function(){
+        if (this.canvas.getContext){
+          var ctx = this.canvas.getContext('2d');
+
+          var img = new Image();
+
+          img.onload = function(){
+            ctx.drawImage(img, 0, 0);
+
+        }
+        img.src = 'http://vignette2.wikia.nocookie.net/dragonball/images/1/13/GokuVsKingPiccoloOldx.png/revision/latest/scale-to-width-down/180?cb=20100729140102';
+        }
     }
 };
 
@@ -221,10 +272,11 @@ var view1 = new View(100,340);
 
 
 //view1.updatePlayerPosition();
-    //view1.reDrawCanvas();
-    //view1.drawTextBox();
-    //view1.writeText("ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUV");
-    //view1.drawNextArrow();
+    view1.reDrawCanvas();
+    view1.drawAnImage();
+    view1.drawTextBox();
+    view1.writeText("ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUV");
+    view1.drawNextArrow();
 	var FPS = 60;
  		setInterval(function() {
  		// 	view1.reDrawCanvas();
